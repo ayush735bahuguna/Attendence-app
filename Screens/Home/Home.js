@@ -22,6 +22,8 @@ export default function Home({ navigation }) {
         { "Name": "POST HARVEST PROCESS & FOOD ENGINEERING" },
         { "Name": "SOIL & WATER CONSERVATION ENGINEERING" },
     ];
+
+
     return (
         <SafeAreaView className='px-3 pt-3'>
             <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>

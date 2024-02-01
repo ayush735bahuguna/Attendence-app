@@ -1,10 +1,13 @@
 import * as React from 'react';
-import { Appbar, Chip } from 'react-native-paper';
+import { Appbar, Chip, TextInput } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
+import ModelComponent from '../ModalComponent'
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 
 export default function CoursePage({ route, navigation }) {
     const { CourseName, CourseId, Year } = route.params;
+    const [text, settext] = React.useState();
+    const [Id, setId] = React.useState();
     const PresentStudents = [
         { name: 'Whole list is not visible' },
         { name: 'Ayush Bahuguna' },
@@ -36,11 +39,37 @@ export default function CoursePage({ route, navigation }) {
                 <Chip icon="information" className='text-2xl'>{Year} year</Chip>
 
                 <TouchableOpacity
-                    className='m-2 rounded-lg bg-slate-300 p-4 my-10 flex items-center justify-center'
+                    className='m-2 rounded-lg bg-slate-300 p-4 my-3 flex items-center justify-center'
                     onPress={() => { navigation.navigate('Attendence') }}
                 >
                     <Text>Take Attendence</Text>
                 </TouchableOpacity>
+
+                <ModelComponent
+                    title='Add Manual Attendence'
+                    trigger={<View className='rounded-lg bg-slate-300 p-4 m-2 mb-3 flex items-center justify-center'>
+                        <Text className='text-center'>Add Manually</Text>
+                    </View>}
+                    content={<View>
+                        <TextInput
+                            label="Id of Student"
+                            value={Id}
+                            mode='outlined'
+                            onChangeText={text => setId(text)}
+                        />
+                        <TextInput
+                            label="Name of Student"
+                            value={text}
+                            mode='outlined'
+                            className='mt-2'
+                            onChangeText={text => settext(text)}
+                        />
+
+                        <TouchableOpacity className='p-1 my-1 mt-6 rounded-lg bg-slate-700'>
+                            <Text className='text-white text-center text-xl m-2'>Mark Present</Text>
+                        </TouchableOpacity>
+                    </View>}
+                />
 
                 <Text className='text-xl my-3'>Present Students List</Text>
                 <View>

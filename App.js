@@ -5,10 +5,16 @@ import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navig
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Home from './Screens/Home/Home'
-import Settings from './Screens/Settings/Settings'
+import Profile from './Screens/Profile/Profile'
+import { FontAwesome5 } from '@expo/vector-icons';
 import CoursePage from './Components/CoursePage/CoursePage'
 import Branch from './Components/Branch/Branch';
 import AttendencePage from './Components/Attendence/AttendencePage';
+import LoginScreen from './Screens/Auth/Login/Login';
+import RegistrationScreen from './Screens/Auth/Signup/Signup';
+import React from 'react';
+import Loader from './Components/loader';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -22,10 +28,10 @@ function StackNavigation() {
           tabBarIcon: ({ color }) => (<Feather name="home" size={24} color={color} />),
         }}
       />
-      <Tab.Screen name="Settings" component={Settings}
+      <Tab.Screen name="Profile" component={Profile}
         options={{
-          tabBarLabel: 'Settings',
-          tabBarIcon: ({ color }) => (<Feather name="settings" size={24} color={color} />),
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({ color }) => (<FontAwesome5 name="user-circle" size={24} color="black" />),
         }}
       />
     </Tab.Navigator>
@@ -33,18 +39,59 @@ function StackNavigation() {
 }
 
 export default function App() {
+  const [initialRouteName, setInitialRouteName] = React.useState('');
+
+  React.useEffect(() => {
+    // setTimeout(() => {
+    // }, 2000);
+    console.log('checking');
+    authUser();
+  }, []);
+
+  const authUser = async () => {
+    try {
+      let userData = await AsyncStorage.getItem('userData');
+      setTimeout(() => {
+        if (userData) {
+          userData = JSON.parse(userData);
+
+          console.log(initialRouteName);
+          console.log(userData);
+
+          if (userData.loggedIn) {
+            setInitialRouteName('HomeScreen');
+          } else {
+            setInitialRouteName('LoginScreen');
+          }
+        } else {
+          setInitialRouteName('RegistrationScreen');
+        }
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+      setInitialRouteName('RegistrationScreen');
+    }
+  };
+
   return (
     <PaperProvider>
       <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="StackNavigation"
-            component={StackNavigation}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="Branch" component={Branch} options={{ headerShown: false }} />
-          <Stack.Screen name="CoursePage" component={CoursePage} options={{ headerShown: false }} />
-          <Stack.Screen name="Attendence" component={AttendencePage} options={{ headerShown: false }} />
-        </Stack.Navigator>
+
+        {!initialRouteName ? (
+          <Loader visible={true} />
+        ) : (
+          <Stack.Navigator
+            initialRouteName={initialRouteName}
+            screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
+            <Stack.Screen name="LoginScreen" component={LoginScreen} />
+            <Stack.Screen name="HomeScreen" component={StackNavigation} />
+
+            <Stack.Screen name="Branch" component={Branch} />
+            <Stack.Screen name="CoursePage" component={CoursePage} />
+            <Stack.Screen name="Attendence" component={AttendencePage} />
+          </Stack.Navigator>
+        )}
       </NavigationContainer>
     </PaperProvider>
   );
