@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Appbar } from 'react-native-paper';
+import { Appbar, Chip } from 'react-native-paper';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import SelectYear from './SelectYear'
 
 export default function Branch({ route, navigation }) {
-    const { BranchId, BranchName } = route.params;
+    const { BranchName } = route.params;
     const [Year, setYear] = React.useState(null);
     const Data = [
         { "Name": "Digital signal processing" },
@@ -18,6 +18,7 @@ export default function Branch({ route, navigation }) {
             </Appbar.Header>
 
             <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} className='px-3 pt-3'>
+                <Chip icon="information" className='text-2xl'>{BranchName}</Chip>
 
                 <SelectYear setYear={setYear} />
 
@@ -28,8 +29,8 @@ export default function Branch({ route, navigation }) {
                     <View>
                         {Data.map((e, i) => {
                             return <View key={i} >
-                                <TouchableOpacity onPress={() => navigation.navigate('CoursePage', {
-                                    CourseName: e.Name, CourseId: 12, Year: Year,
+                                <TouchableOpacity onPress={() => navigation.navigate('ClassPage', {
+                                    BranchName: BranchName, CourseName: e.Name, Year: Year,
                                 })} className='bg-gray-200 p-3 my-1 rounded-lg py-5'
                                 >
                                     <View className='flex flex-row gap-2 items-center justify-start'>

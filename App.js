@@ -7,8 +7,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './Screens/Home/Home'
 import Profile from './Screens/Profile/Profile'
 import { FontAwesome5 } from '@expo/vector-icons';
-import CoursePage from './Components/CoursePage/CoursePage'
+import IndivisualClassPage from './Components/Class/IndivisualClassPage'
 import Branch from './Components/Branch/Branch';
+import ClassPage from './Components/Class/ClassPage';
 import AttendencePage from './Components/Attendence/AttendencePage';
 import LoginScreen from './Screens/Auth/Login/Login';
 import RegistrationScreen from './Screens/Auth/Signup/Signup';
@@ -42,9 +43,6 @@ export default function App() {
   const [initialRouteName, setInitialRouteName] = React.useState('');
 
   React.useEffect(() => {
-    // setTimeout(() => {
-    // }, 2000);
-    console.log('checking');
     authUser();
   }, []);
 
@@ -88,7 +86,8 @@ export default function App() {
             <Stack.Screen name="HomeScreen" component={StackNavigation} />
 
             <Stack.Screen name="Branch" component={Branch} />
-            <Stack.Screen name="CoursePage" component={CoursePage} />
+            <Stack.Screen name="IndivisualClassPage" component={IndivisualClassPage} />
+            <Stack.Screen name="ClassPage" component={ClassPage} />
             <Stack.Screen name="Attendence" component={AttendencePage} />
           </Stack.Navigator>
         )}
