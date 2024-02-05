@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Appbar, Chip } from 'react-native-paper';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import { Feather } from '@expo/vector-icons';
 import SelectYear from './SelectYear'
 
 export default function Branch({ route, navigation }) {
@@ -33,8 +34,10 @@ export default function Branch({ route, navigation }) {
                                     BranchName: BranchName, CourseName: e.Name, Year: Year,
                                 })} className='bg-gray-200 p-3 my-1 rounded-lg py-5'
                                 >
-                                    <View className='flex flex-row gap-2 items-center justify-start'>
+                                    <View className='flex flex-row gap-2 items-center justify-between'>
+                                        <Text>{i + 1}</Text>
                                         <Text >{e.Name}</Text>
+                                        <Feather name="trash-2" size={24} color="black" />
                                     </View>
                                 </TouchableOpacity>
                             </View>

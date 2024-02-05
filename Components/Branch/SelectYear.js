@@ -15,38 +15,23 @@ const SelectYear = ({ setYear }) => {
     }, [Value])
     return (
         <View className='mb-4'>
-            <Text Text className='text-xl my-2' > Select a year</Text >
-            {
-                Data.map((e, i) => {
-                    return <TouchableOpacity key={i} className={`flex gap-2 flex-row w-full`}
-                        onPress={() => { setValue(e.value) }}>
-                        <RadioButton
-                            className={``}
-                            value={e.value}
-                            status={Value === e.value ? 'checked' : 'unchecked'}
-                            onPress={() => { setValue(e.value) }}
-                        />
-                        <Text>{e.value}</Text>
-                    </TouchableOpacity>
-                })
-            }
-
-            {/* < RadioButton
-                value="second"
-                status={checked === 'second' ? 'checked' : 'unchecked'
+            <Text Text className='text-xl mt-2' > Select a year</Text >
+            <View className='p-2 '>
+                {
+                    Data.map((e, i) => {
+                        return <TouchableOpacity key={i} className={`flex gap-2 flex-row w-full ${Value === e.value && 'bg-slate-200'} mt-1 rounded-lg`}
+                            onPress={() => { setValue(e.value) }}>
+                            <RadioButton
+                                className={``}
+                                value={e.value}
+                                status={Value === e.value ? 'checked' : 'unchecked'}
+                                onPress={() => { setValue(e.value) }}
+                            />
+                            <Text>{e.value}</Text>
+                        </TouchableOpacity>
+                    })
                 }
-                onPress={() => setChecked('second')}
-            />
-            < RadioButton
-                value="Third"
-                status={checked === 'first' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('Third')}
-            />
-            < RadioButton
-                value="Final"
-                status={checked === 'second' ? 'checked' : 'unchecked'}
-                onPress={() => setChecked('Final')}
-            /> */}
+            </View>
         </View>
     );
 };

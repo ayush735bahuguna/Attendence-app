@@ -16,6 +16,7 @@ import RegistrationScreen from './Screens/Auth/Signup/Signup';
 import React from 'react';
 import Loader from './Components/loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StatusBar } from 'expo-status-bar';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -52,8 +53,6 @@ export default function App() {
       setTimeout(() => {
         if (userData) {
           userData = JSON.parse(userData);
-
-          console.log(initialRouteName);
           console.log(userData);
 
           if (userData.loggedIn) {
@@ -74,7 +73,7 @@ export default function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-
+        <StatusBar barStyle="dark-content" backgroundColor="" />
         {!initialRouteName ? (
           <Loader visible={true} />
         ) : (

@@ -4,23 +4,21 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 
 export default function Home({ navigation }) {
 
     const Data = [
         { "Name": "AGRICULTURAL ENGINEERING", icon: <MaterialIcons name="agriculture" size={24} color="black" /> },
-        { "Name": "COMPUTER ENGINEERING", icon: <FontAwesome6 name="computer" size={24} color="black" /> },
-        { "Name": "CIVIL ENGINEERING" },
-        { "Name": "ELECTRONICS & COMMUNICATION ENGINEERING" },
+        { "Name": "COMPUTER ENGINEERING", icon: <MaterialIcons name="computer" size={24} color="black" /> },
+        { "Name": "CIVIL ENGINEERING", icon: <Entypo name="compass" size={24} color="black" /> },
+        { "Name": "INFORMATION TECHNOLOGY", icon: <MaterialIcons name="signal-cellular-connected-no-internet-0-bar" size={24} color="black" /> },
+        { "Name": "ELECTRONICS & COMMUNICATION  ENGINEERING", icon: <Ionicons name="hardware-chip" size={24} color="black" /> },
         { "Name": "ELECTRICAL ENGINEERING", icon: <Ionicons name="flash" size={24} color="black" /> },
-        { "Name": "FARM MACHINERY & POWER ENGINEERING" },
-        { "Name": "MASTER OF COMPUTER APPLICATIONS" },
-        { "Name": "INDUSTRIAL & PRODUCTION ENGINEERING" },
-        { "Name": "INFORMATION TECHNOLOGY" },
-        { "Name": "IRRIGATION & DRAINAGE ENGINEERING" },
-        { "Name": "MECHANICAL ENGINEERING" },
-        { "Name": "POST HARVEST PROCESS & FOOD ENGINEERING" },
-        { "Name": "SOIL & WATER CONSERVATION ENGINEERING" },
+        { "Name": "INDUSTRIAL & PRODUCTION ENGINEERING", icon: <FontAwesome name="industry" size={24} color="black" /> },
+        { "Name": "MECHANICAL ENGINEERING", icon: <FontAwesome6 name="gear" size={24} color="black" /> },
+
     ];
 
 
@@ -32,15 +30,15 @@ export default function Home({ navigation }) {
 
                 <View>
                     {Data.map((e, i) => {
-                        return <View key={i} >
+                        return <View key={i}>
                             <TouchableOpacity onPress={() => navigation.navigate('Branch', {
                                 BranchId: 86,
                                 BranchName: e.Name,
-                            })} className='bg-gray-100 p-3 my-1 rounded-lg py-5'
+                            })} className='bg-gray-100 p-3 my-1 rounded-lg py-3'
                             >
-                                <View className='flex flex-row gap-2 items-center justify-start'>
-                                    <View >{e.icon}</View>
-                                    <Text >{e.Name}</Text>
+                                <View className='flex flex-row gap-3 items-center justify-start'>
+                                    <View>{e.icon}</View>
+                                    <Text>{e.Name} </Text>
                                 </View>
                             </TouchableOpacity>
                         </View>

@@ -3,7 +3,6 @@ import { useRef, useState } from 'react';
 import * as FaceDetector from 'expo-face-detector';
 import { Button, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 // import axios from 'axios';
 

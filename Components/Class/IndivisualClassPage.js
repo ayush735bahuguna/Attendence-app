@@ -21,7 +21,7 @@ export default function IndivisualClassPage({ route, navigation }) {
     const manualAttendenceHandler = () => {
         if (text !== null && Id !== null) {
             setPresentStudents([...PresentStudents, { "name": text, "id": Id }])
-            console.log(PresentStudents);
+            // console.log(PresentStudents);
         }
     }
 
