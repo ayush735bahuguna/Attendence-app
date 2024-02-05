@@ -5,6 +5,7 @@ import ModelComponent from '../ModalComponent'
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 
 export default function IndivisualClassPage({ route, navigation }) {
+    const [visible, setVisible] = React.useState(false);
     const { BranchName, CourseName, Date, Year } = route.params;
     const [text, settext] = React.useState(null);
     const [Id, setId] = React.useState(null);
@@ -23,6 +24,7 @@ export default function IndivisualClassPage({ route, navigation }) {
             setPresentStudents([...PresentStudents, { "name": text, "id": Id }])
             // console.log(PresentStudents);
         }
+        setVisible(false);
     }
 
     function findWithAttr(array, attr, value) {
@@ -56,6 +58,7 @@ export default function IndivisualClassPage({ route, navigation }) {
                 </TouchableOpacity>
 
                 <ModelComponent
+                    visible={visible} setVisible={setVisible}
                     title='Add Manual Attendence'
                     trigger={<View className='rounded-lg bg-slate-300 p-4 m-2 mb-3 flex items-center justify-center'>
                         <Text className='text-center'>Add Manually</Text>

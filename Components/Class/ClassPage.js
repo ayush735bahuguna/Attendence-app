@@ -6,6 +6,7 @@ import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import { Feather } from '@expo/vector-icons';
 
 export default function ClassPage({ route, navigation }) {
+    const [visible, setVisible] = React.useState(false);
     const { BranchName, CourseName, Year } = route.params;
     const [classDate, setclassDate] = React.useState(null);
     const [Class, setClass] = React.useState([
@@ -16,6 +17,7 @@ export default function ClassPage({ route, navigation }) {
         if (classDate !== null) {
             setClass(Class => [...Class, { "date": `${classDate.getDate() + '/' + classDate.getMonth() + 1 + '/' + classDate.getFullYear()}`, "time": `${classDate.getHours() + ':' + classDate.getMinutes()}` }])
         }
+        setVisible(false);
     }
     return (
         <View>
@@ -32,6 +34,7 @@ export default function ClassPage({ route, navigation }) {
 
 
                 <ModelComponent
+                    visible={visible} setVisible={setVisible}
                     title='Add Class'
                     trigger={<View className='rounded-lg bg-slate-300 p-4 m-2 mb-3 flex items-center justify-center'>
                         <Text className='text-center'>Add class</Text>
