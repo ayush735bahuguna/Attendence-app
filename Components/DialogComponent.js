@@ -2,8 +2,7 @@ import * as React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Button, Dialog, Portal, PaperProvider, Text } from 'react-native-paper';
 
-const DialogComponent = ({ trigger, title, content, handlertext, onPressHandler }) => {
-    const [visible, setVisible] = React.useState(false);
+const DialogComponent = ({ trigger, title, content, handlertext, onPressHandler, visible, setVisible }) => {
     const showDialog = () => setVisible(true);
     const hideDialog = () => {
         setVisible(false)
@@ -14,7 +13,7 @@ const DialogComponent = ({ trigger, title, content, handlertext, onPressHandler 
         <View>
             <TouchableOpacity onPress={showDialog}>{trigger}</TouchableOpacity>
             <Portal>
-                <Dialog visible={visible} onDismiss={hideDialog}>
+                <Dialog visible={visible} onDismiss={() => { setVisible(false) }}>
                     <Dialog.Title>{title}</Dialog.Title>
                     <Dialog.Content>
                         <Text variant="bodyMedium">{content}</Text>

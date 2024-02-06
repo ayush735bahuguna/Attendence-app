@@ -37,7 +37,7 @@ export default function Branch({ route, navigation }) {
                                     <View className='flex flex-row gap-2 items-center justify-between'>
                                         <Text>{i + 1}</Text>
                                         <Text >{e.Name}</Text>
-                                        <Feather name="trash-2" size={24} color="black" />
+                                        <View></View>
                                     </View>
                                 </TouchableOpacity>
                             </View>

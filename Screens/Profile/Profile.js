@@ -8,6 +8,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Profile({ navigation }) {
     const [userDetails, setUserDetails] = React.useState();
+    const [visible, setVisible] = React.useState(false);
+
 
     React.useEffect(() => {
         getUserData();
@@ -40,6 +42,7 @@ export default function Profile({ navigation }) {
                     <View className='flex flex-row gap-3'>
                         <Text className='text-2xl'>{userDetails?.fullname}</Text>
                         <DialogComponent
+                            visible={visible} setVisible={setVisible}
                             title='Are you sure?'
                             content='this will log out you from app.'
                             trigger={<MaterialIcons name="exit-to-app" size={30}

@@ -30,9 +30,9 @@ export default function DatePickerComponent({ setclassDate }) {
 
     return (
         <>
-            <TouchableOpacity onPress={showDatepicker} className='rounded-lg m-1 p-2 py-2  bg-slate-300 '>
+            <TouchableOpacity onPress={showDatepicker} className='rounded-lg m-1 p-2 py-2  bg-slate-200 '>
                 <Text className='text-base text-center'>Select date</Text></TouchableOpacity>
-            <TouchableOpacity onPress={showTimepicker} className='rounded-lg m-1 p-2 py-2  bg-slate-300 '>
+            <TouchableOpacity onPress={showTimepicker} className='rounded-lg m-1 p-2 py-2  bg-slate-200 '>
                 <Text className='text-base text-center'>Select time</Text></TouchableOpacity>
             <Text className='text-xl text-center my-2'>Selected Date and Time {date.toLocaleString()}</Text>
         </>
