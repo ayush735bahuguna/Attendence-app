@@ -15,7 +15,6 @@ export default function AttendencePage() {
 
 
     if (!permission) {
-        // Camera permissions are still loading
         return <View />;
     }
 
@@ -37,8 +36,17 @@ export default function AttendencePage() {
             const options = { quality: 0.5, base64: true };
             const data = await cameraref?.current?.takePictureAsync(options);
             setimg(data?.uri);
+            await convertToBlob(data?.uri)
         } catch (error) {
             console.log(error, "ERROR <<<<<<<<<<<<<")
+        }
+    }
+
+    async function convertToBlob(uri) {
+        try {
+
+        } catch (error) {
+            console.log(error);
         }
     }
 

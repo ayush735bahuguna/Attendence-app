@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "app",
-    "slug": "app",
+    "name": "Attendence-app",
+    "slug": "Attendence-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -31,6 +31,12 @@
       "eas": {
         "projectId": "68795fb4-e4cb-42a7-911d-1069a7ad75a5"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/68795fb4-e4cb-42a7-911d-1069a7ad75a5"
     }
   }
 }

@@ -14,7 +14,7 @@ const DialogComponent = ({ trigger, title, content, handlertext, onPressHandler,
             <TouchableOpacity onPress={showDialog}>{trigger}</TouchableOpacity>
             <Portal>
                 <Dialog visible={visible} onDismiss={() => { setVisible(false) }}>
-                    <Dialog.Title>{title}</Dialog.Title>
+                    <Dialog.Title><Text>{title}</Text></Dialog.Title>
                     <Dialog.Content>
                         <Text variant="bodyMedium">{content}</Text>
                     </Dialog.Content>

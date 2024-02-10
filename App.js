@@ -17,7 +17,10 @@ import React from 'react';
 import Loader from './Components/loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
+
+const queryClient = new QueryClient()
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -50,20 +53,20 @@ export default function App() {
   const authUser = async () => {
     try {
       let userData = await AsyncStorage.getItem('userData');
-      setTimeout(() => {
-        if (userData) {
-          userData = JSON.parse(userData);
-          console.log(userData);
+      // setTimeout(() => {
+      if (userData) {
+        userData = JSON.parse(userData);
+        console.log(userData);
 
-          if (userData.loggedIn) {
-            setInitialRouteName('HomeScreen');
-          } else {
-            setInitialRouteName('LoginScreen');
-          }
+        if (userData.loggedIn) {
+          setInitialRouteName('HomeScreen');
         } else {
-          setInitialRouteName('RegistrationScreen');
+          setInitialRouteName('LoginScreen');
         }
-      }, 2000);
+      } else {
+        setInitialRouteName('RegistrationScreen');
+      }
+      // }, 2000);
     } catch (error) {
       console.log(error);
       setInitialRouteName('RegistrationScreen');
@@ -72,25 +75,27 @@ export default function App() {
 
   return (
     <PaperProvider>
-      <NavigationContainer>
-        <StatusBar barStyle="dark-content" backgroundColor="" />
-        {!initialRouteName ? (
-          <Loader visible={true} />
-        ) : (
-          <Stack.Navigator
-            initialRouteName={initialRouteName}
-            screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
-            <Stack.Screen name="LoginScreen" component={LoginScreen} />
-            <Stack.Screen name="HomeScreen" component={StackNavigation} />
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer>
+          <StatusBar animated={true} hidden={false} style='auto' />
+          {!initialRouteName ? (
+            <Loader visible={true} />
+          ) : (
+            <Stack.Navigator
+              initialRouteName={initialRouteName}
+              screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
+              <Stack.Screen name="LoginScreen" component={LoginScreen} />
+              <Stack.Screen name="HomeScreen" component={StackNavigation} />
 
-            <Stack.Screen name="Branch" component={Branch} />
-            <Stack.Screen name="IndivisualClassPage" component={IndivisualClassPage} />
-            <Stack.Screen name="ClassPage" component={ClassPage} />
-            <Stack.Screen name="Attendence" component={AttendencePage} />
-          </Stack.Navigator>
-        )}
-      </NavigationContainer>
+              <Stack.Screen name="Branch" component={Branch} />
+              <Stack.Screen name="IndivisualClassPage" component={IndivisualClassPage} />
+              <Stack.Screen name="ClassPage" component={ClassPage} />
+              <Stack.Screen name="Attendence" component={AttendencePage} />
+            </Stack.Navigator>
+          )}
+        </NavigationContainer>
+      </QueryClientProvider>
     </PaperProvider>
   );
 }
