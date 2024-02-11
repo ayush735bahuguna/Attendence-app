@@ -1,12 +1,8 @@
 import { PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
-import { Feather } from '@expo/vector-icons';
-import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Home from './Screens/Home/Home'
-import Profile from './Screens/Profile/Profile'
-import { FontAwesome5 } from '@expo/vector-icons';
 import IndivisualClassPage from './Components/Class/IndivisualClassPage'
 import Branch from './Components/Branch/Branch';
 import ClassPage from './Components/Class/ClassPage';
@@ -18,46 +14,22 @@ import Loader from './Components/loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import Context from './Context/Context';
 
 
 const queryClient = new QueryClient()
-const Tab = createMaterialBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-function StackNavigation() {
-  return (
-    <Tab.Navigator initialRouteName="Home">
-      <Tab.Screen name="Home" component={Home}
-        options={{
-          tabBarLabel: 'Home',
-          tabBarIcon: ({ color }) => (<Feather name="home" size={24} color={color} />),
-        }}
-      />
-      <Tab.Screen name="Profile" component={Profile}
-        options={{
-          tabBarLabel: 'Profile',
-          tabBarIcon: ({ color }) => (<FontAwesome5 name="user-circle" size={24} color="black" />),
-        }}
-      />
-    </Tab.Navigator>
-  );
-}
 
 export default function App() {
   const [initialRouteName, setInitialRouteName] = React.useState('');
-
-  React.useEffect(() => {
-    authUser();
-  }, []);
+  React.useEffect(() => { authUser() }, []);
 
   const authUser = async () => {
     try {
       let userData = await AsyncStorage.getItem('userData');
-      // setTimeout(() => {
       if (userData) {
         userData = JSON.parse(userData);
-        console.log(userData);
-
         if (userData.loggedIn) {
           setInitialRouteName('HomeScreen');
         } else {
@@ -66,7 +38,6 @@ export default function App() {
       } else {
         setInitialRouteName('RegistrationScreen');
       }
-      // }, 2000);
     } catch (error) {
       console.log(error);
       setInitialRouteName('RegistrationScreen');
@@ -77,23 +48,25 @@ export default function App() {
     <PaperProvider>
       <QueryClientProvider client={queryClient}>
         <NavigationContainer>
-          <StatusBar animated={true} hidden={false} style='auto' />
-          {!initialRouteName ? (
-            <Loader visible={true} />
-          ) : (
-            <Stack.Navigator
-              initialRouteName={initialRouteName}
-              screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
-              <Stack.Screen name="LoginScreen" component={LoginScreen} />
-              <Stack.Screen name="HomeScreen" component={StackNavigation} />
+          <Context>
+            <StatusBar animated={true} hidden={false} style='auto' />
+            {!initialRouteName ? (
+              <Loader visible={true} />
+            ) : (
+              <Stack.Navigator
+                initialRouteName={initialRouteName}
+                screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
+                <Stack.Screen name="LoginScreen" component={LoginScreen} />
+                <Stack.Screen name="HomeScreen" component={Home} />
 
-              <Stack.Screen name="Branch" component={Branch} />
-              <Stack.Screen name="IndivisualClassPage" component={IndivisualClassPage} />
-              <Stack.Screen name="ClassPage" component={ClassPage} />
-              <Stack.Screen name="Attendence" component={AttendencePage} />
-            </Stack.Navigator>
-          )}
+                <Stack.Screen name="Branch" component={Branch} />
+                <Stack.Screen name="IndivisualClassPage" component={IndivisualClassPage} />
+                <Stack.Screen name="ClassPage" component={ClassPage} />
+                <Stack.Screen name="Attendence" component={AttendencePage} />
+              </Stack.Navigator>
+            )}
+          </Context>
         </NavigationContainer>
       </QueryClientProvider>
     </PaperProvider>

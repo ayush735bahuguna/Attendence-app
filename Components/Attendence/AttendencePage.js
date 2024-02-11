@@ -1,10 +1,10 @@
 import { Camera, CameraType } from 'expo-camera';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as FaceDetector from 'expo-face-detector';
 import { Button, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
-// import axios from 'axios';
+import { useGlobalContext } from '../../Context/Context';
 
 export default function AttendencePage() {
     const [type, setType] = useState(CameraType.back);
@@ -12,7 +12,11 @@ export default function AttendencePage() {
     const [faceID, setfaceId] = useState();
     const cameraref = useRef(Camera);
     const [img, setimg] = useState();
+    const { setStudentArrayFromAttendencePage } = useGlobalContext();
 
+    useEffect(() => {
+        setStudentArrayFromAttendencePage([{ name: 'Ayush Bahuguna', id: '57531' }, { name: 'Ayush ', id: '5753d1' }])
+    }, [])
 
     if (!permission) {
         return <View />;
@@ -35,25 +39,16 @@ export default function AttendencePage() {
         try {
             const options = { quality: 0.5, base64: true };
             const data = await cameraref?.current?.takePictureAsync(options);
+            // console.log(data?.base64); // sent to server
             setimg(data?.uri);
-            await convertToBlob(data?.uri)
         } catch (error) {
             console.log(error, "ERROR <<<<<<<<<<<<<")
-        }
-    }
-
-    async function convertToBlob(uri) {
-        try {
-
-        } catch (error) {
-            console.log(error);
         }
     }
 
     const handleFacesDetected = async ({ faces, image }) => {
         setfaceId(faces[0]?.faceID);
         if (faceID !== faces[0]?.faceID && faceID !== undefined) {
-
             takePicture();
         }
     };
