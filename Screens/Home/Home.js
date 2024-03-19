@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
@@ -12,17 +12,17 @@ import { Avatar, Surface } from 'react-native-paper';
 import DialogComponent from '../../Components/DialogComponent';
 
 export default function Home({ navigation }) {
-
     const [userDetails, setUserDetails] = React.useState();
     const [visible, setVisible] = React.useState(false);
     const [WeekDay, setWeekDay] = React.useState('');
+
     const Data = [
         { "Name": "AGRICULTURAL ENGINEERING", icon: <MaterialIcons name="agriculture" size={24} color="black" /> },
-        { "Name": "COMPUTER ENGINEERING", icon: <MaterialIcons name="computer" size={24} color="black" /> },
+        { "Name": "COMPUTER ENGINEERING", icon: <MaterialIcons name="computer" size={24} color="black" />, "id": 3 },
         { "Name": "CIVIL ENGINEERING", icon: <Entypo name="compass" size={24} color="black" /> },
         { "Name": "INFORMATION TECHNOLOGY", icon: <MaterialIcons name="signal-cellular-connected-no-internet-0-bar" size={24} color="black" /> },
-        { "Name": "ELECTRONICS & COMMUNICATION  ENGINEERING", icon: <Ionicons name="hardware-chip" size={24} color="black" /> },
-        { "Name": "ELECTRICAL ENGINEERING", icon: <Ionicons name="flash" size={24} color="black" /> },
+        { "Name": "ELECTRONICS & COMMUNICATION  ENGINEERING", icon: <Ionicons name="hardware-chip" size={24} color="black" />, "id": 1 },
+        { "Name": "ELECTRICAL ENGINEERING", icon: <Ionicons name="flash" size={24} color="black" />, "id": 2 },
         { "Name": "INDUSTRIAL & PRODUCTION ENGINEERING", icon: <FontAwesome name="industry" size={24} color="black" /> },
         { "Name": "MECHANICAL ENGINEERING", icon: <FontAwesome6 name="gear" size={24} color="black" /> },
 
@@ -46,8 +46,9 @@ export default function Home({ navigation }) {
         }
     }, [userDetails]);
 
-    const logout = () => {
-        AsyncStorage.setItem('userData', JSON.stringify({ ...userDetails, loggedIn: false }));
+    const logout = async () => {
+        await AsyncStorage.setItem('userData', '');
+        await AsyncStorage.setItem('acessToken', '');
         navigation.navigate('LoginScreen');
     };
 
@@ -65,7 +66,10 @@ export default function Home({ navigation }) {
                         visible={visible} setVisible={setVisible}
                         title='Are you sure?'
                         content='this will log out you from app.'
-                        trigger={<Avatar.Text size={45} label={(userDetails?.fullname)?.slice(0, 2)?.toUpperCase()} className='m-3' />}
+                        trigger={<Avatar.Text size={45}
+                            // label={(userDetails?.fullname)?.slice(0, 2)?.toUpperCase()}
+                            label={'A'}
+                            className='m-3' />}
                         handlertext='Log out'
                         onPressHandler={logout}
                     />
@@ -88,11 +92,14 @@ export default function Home({ navigation }) {
                     {Data.map((e, i) => {
                         return <View key={i} >
                             <TouchableOpacity onPress={() => navigation.navigate('Branch', {
-                                BranchId: 86,
+                                BranchId: e.id,
                                 BranchName: e.Name,
+
                             })} className='bg-sky-300/10 p-3 my-1 rounded-lg py-3'
                             >
                                 <View className='flex flex-row gap-3 items-center justify-start'>
+
+                                    <Text>{e.id} </Text>
                                     <View>{e.icon}</View>
                                     <Text>{e.Name} </Text>
                                 </View>

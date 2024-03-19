@@ -5,52 +5,35 @@ import Button from '../../../Components/Button';
 import Input from '../../../Components/input';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../../../Components/loader';
+import axios from 'axios';
+import { useGlobalContext } from '../../../Context/Context';
 
 const LoginScreen = ({ navigation }) => {
     const [inputs, setInputs] = React.useState({ email: '', password: '' });
     const [errors, setErrors] = React.useState({});
     const [loading, setLoading] = React.useState(false);
+    const { setacessToken } = useGlobalContext();
 
-    const validate = async () => {
-        Keyboard.dismiss();
-        let isValid = true;
+
+    const authhandler = async () => {
         if (!inputs.email) {
             handleError('Please input email', 'email');
-            isValid = false;
+            return
         }
         if (!inputs.password) {
             handleError('Please input password', 'password');
-            isValid = false;
+            return
         }
-        if (isValid) {
-            login();
-        }
-    };
-
-    const login = () => {
         setLoading(true);
-        setTimeout(async () => {
-            setLoading(false);
-            let userData = await AsyncStorage.getItem('userData');
-            if (userData) {
-                userData = JSON.parse(userData);
-                if (
-                    inputs.email == userData.email &&
-                    inputs.password == userData.password
-                ) {
-                    navigation.navigate('HomeScreen');
-                    AsyncStorage.setItem(
-                        'userData',
-                        JSON.stringify({ ...userData, loggedIn: true }),
-                    );
-                } else {
-                    Alert.alert('Error', 'Invalid Details');
-                }
-            } else {
-                Alert.alert('Error', 'User does not exist');
-            }
-        }, 3000);
-    };
+        const { data } = await axios.post(`https://attendance-app-besv.onrender.com/auth/login/`, { "email": inputs.email, "password": inputs.password })
+        // console.log(data?.token?.access);
+        setacessToken(data?.token?.access);
+        await AsyncStorage.setItem('userData', JSON.stringify(data?.token));
+        await AsyncStorage.setItem('acessToken', data?.token?.access)
+        setLoading(false);
+        navigation.navigate('HomeScreen');
+    }
+
 
     const handleOnchange = (text, input) => {
         setInputs(prevState => ({ ...prevState, [input]: text }));
@@ -87,7 +70,7 @@ const LoginScreen = ({ navigation }) => {
                         error={errors.password}
                         password
                     />
-                    <Button title="Log In" onPress={validate} />
+                    <Button title="Log In" onPress={authhandler} />
                     <Text
                         onPress={() => navigation.navigate('RegistrationScreen')}
                         style={{

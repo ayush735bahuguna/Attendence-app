@@ -5,9 +5,10 @@ import ModelComponent from '../ModalComponent'
 import { View, Text, TouchableOpacity, FlatList } from 'react-native'
 import Loader from '../loader';
 import { useGlobalContext } from '../../Context/Context';
+import axios from 'axios';
 
 export default function IndivisualClassPage({ route, navigation }) {
-    const { BranchName, CourseName, Date, Year } = route.params;
+    const { BranchName, CourseName, Date, Year, classId } = route.params;
     const [visible, setVisible] = React.useState(false);
     const [text, settext] = React.useState(null);
     const [Id, setId] = React.useState(null);
@@ -23,9 +24,21 @@ export default function IndivisualClassPage({ route, navigation }) {
 
     const manualAttendenceHandler = () => {
         if (text !== null && Id !== null) {
-            setExteData({ "name": text, "id": Id })
-            setPresentStudentsArray([{ "name": text, "id": Id }, ...PresentStudentsArray])
-            setStudentArrayFromAttendencePage([{ "name": text, "id": Id }, ...PresentStudentsArray])
+            setExteData(
+                // {"name": text, "id":
+                Id
+                // }
+            )
+            setPresentStudentsArray([
+                // { "name": text, "id":
+                Id
+                // }
+                , ...PresentStudentsArray])
+            setStudentArrayFromAttendencePage([
+                // { "name": text, "id":
+                Id
+                // }
+                , ...PresentStudentsArray])
             // alert(`Added student name:${text} , id:${Id}`);
         }
         setVisible(false);
@@ -33,10 +46,14 @@ export default function IndivisualClassPage({ route, navigation }) {
 
     const AddAttendencehandler = async () => {
         setDoneloader(true)
-        await fetch('https://650ebde754d18aabfe996c09.mockapi.io/studentpresentlist', { method: 'POST' }, PresentStudentsArray)
-            .then((res) => console.log(res))
+        try {
+            await axios.post(`https://attendance-app-besv.onrender.com/api/markattendence/${classId} `, PresentStudentsArray)
+        } catch (error) {
+            console.log(error);
+        }
         navigation.navigate('ClassPage', { BranchName: BranchName, CourseName: CourseName, Date: Date, Year: Year });
         setStudentArrayFromAttendencePage([]);
+        setDoneloader(false)
     }
 
     return (
@@ -103,12 +120,14 @@ export default function IndivisualClassPage({ route, navigation }) {
                         <View className='text-2xl m-1 flex flex-row items-center justify-between bg-slate-200 p-2 rounded-lg'
                         >
                             <View className='flex flex-col'>
-                                <Text>{item.name}</Text>
-                                <Text>{item.id}</Text>
+                                {/* <Text>{item.name}</Text> */}
+                                {/* <Text>{item.id}</Text> */}
+                                <Text>{item}</Text>
                             </View>
                             <AntDesign name="close" size={24} color="black"
                                 onPress={() => {
-                                    const filterArray = PresentStudentsArray.filter(e => e.id !== item.id)
+                                    // const filterArray = PresentStudentsArray.filter(e => e.id !== item.id)
+                                    const filterArray = PresentStudentsArray.filter(e => e !== item)
                                     setPresentStudentsArray(filterArray);
                                 }} />
                         </View>

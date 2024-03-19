@@ -6,11 +6,15 @@ import DatePickerComponent from './DatePickerComponent'
 import { View, Text, ScrollView, TouchableOpacity, FlatList } from 'react-native'
 import { Feather } from '@expo/vector-icons';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import axios from 'axios';
+import { useGlobalContext } from '../../Context/Context';
 
 export default function ClassPage({ route, navigation }) {
+    const { BranchName, CourseName, Year, BatchId, courseId, BranchId } = route.params;
+    const { acessToken } = useGlobalContext();
     const [visible, setVisible] = React.useState(false);
+    const [classId, setclassId] = React.useState(null);
     const [opendeletedialog, setopendeletedialog] = React.useState(false);
-    const { BranchName, CourseName, Year } = route.params;
     const [classDate, setclassDate] = React.useState(null);
     const [ClassToDelete, setClassToDelete] = React.useState(null);
     const [Class, setClass] = React.useState([]);
@@ -24,27 +28,36 @@ export default function ClassPage({ route, navigation }) {
 
     const { data, isLoading, error } = useQuery({
         queryKey: ['ClassTiming'],
-        queryFn: () =>
-            fetch('https://650ebde754d18aabfe996c09.mockapi.io/classdatelist').then((res) => {
-                console.log("fetched");
-                return res.json()
-            }),
+        queryFn: async () => {
+            console.log('class fetch');
+            const { data } = await axios.get(`https://attendance-app-besv.onrender.com/api/lecture-list/${courseId}/${BranchId}/${BatchId}/`);
+            // console.log(data);
+            setclassId(data.id)
+            return data
+        }
+        ,
         staleTime: 5000
     });
 
     const AddDateToClassList = useMutation({
-        mutationFn: () => {
+        mutationFn: async () => {
             if (classDate !== null) {
-                fetch('https://650ebde754d18aabfe996c09.mockapi.io/classdatelist', { method: 'POST' }
-                    , {
-                        "date": `${classDate.getDate() + '/' + classDate.getMonth() + 1 + '/' + classDate.getFullYear()}`,
-                        "time": `${classDate.getHours() + ':' + classDate.getMinutes()}`,
-                        "id": `${classDate.toUTCString()}`
-                    }).then((res) => {
-                        console.log('added');
-                        return res.json()
+                try {
+                    if (acessToken) {
+                        console.log("add class");
+                        const month = classDate.getMonth() + 1;
+                        const { data } = await axios.post(`https://attendance-app-besv.onrender.com/api/create-lecture/`, { headers: { Authorization: `Bearer ${acessToken}` } }, {
+                            "course": courseId,
+                            "batch": BatchId,
+                            "branch": BranchId,
+                            'date': `${classDate.getDate() + '/' + month + '/' + classDate.getFullYear() + ' : ( ' + classDate.getHours() + ':' + classDate.getMinutes() + ' )'}`,
+                        })
+                        console.log(data);
+                        return data
                     }
-                    )
+                } catch (error) {
+                    console.log(error);
+                }
             }
         },
         onSuccess: () => { queryClient.invalidateQueries(['ClassTiming']) }
@@ -61,7 +74,6 @@ export default function ClassPage({ route, navigation }) {
             } else {
                 console.log('no class delete date id');
             }
-
         },
         onSuccess: () => { queryClient.invalidateQueries(['ClassTiming']) }
     });
@@ -88,7 +100,7 @@ export default function ClassPage({ route, navigation }) {
     return (
         <View>
             <Appbar.Header>
-                <Appbar.Content title={CourseName} />
+                <Appbar.Content title={(CourseName).toUpperCase()} />
                 <Appbar.Action icon="close" onPress={() => { navigation.goBack() }} />
             </Appbar.Header>
 
@@ -99,9 +111,9 @@ export default function ClassPage({ route, navigation }) {
                 onRefresh={() => { queryClient.invalidateQueries(['ClassTiming']) }}
                 ListHeaderComponent={
                     <>
-                        <Chip icon="information" className='text-2xl my-1'>{BranchName}</Chip>
+                        <Chip icon="information" className='text-2xl my-1'>{(BranchName).toUpperCase()}</Chip>
                         <Chip icon="information" className='text-2xl my-1'>{CourseName}</Chip>
-                        <Chip icon="information" className='text-2xl my-1'>{Year} year</Chip>
+                        <Chip icon="information" className='text-2xl my-1'>Batch {Year}</Chip>
 
                         <ModelComponent
                             visible={visible} setVisible={setVisible}
@@ -151,7 +163,7 @@ export default function ClassPage({ route, navigation }) {
                             onPress={() => {
                                 navigation.navigate('IndivisualClassPage', {
                                     BranchName: BranchName, CourseName: CourseName,
-                                    Date: item.date, Year: Year
+                                    Date: item.date, Year: Year, classId: classId
                                 })
                             }}
                         >

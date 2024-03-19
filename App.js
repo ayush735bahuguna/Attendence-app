@@ -29,8 +29,8 @@ export default function App() {
     try {
       let userData = await AsyncStorage.getItem('userData');
       if (userData) {
-        userData = JSON.parse(userData);
-        if (userData.loggedIn) {
+        // userData = JSON.parse(userData);
+        if (userData) {
           setInitialRouteName('HomeScreen');
         } else {
           setInitialRouteName('LoginScreen');
